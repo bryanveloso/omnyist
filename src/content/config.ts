@@ -1,16 +1,47 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection, reference, z } from 'astro:content';
 
-const blog = defineCollection({
-	type: 'content',
-	// Type-check frontmatter using a schema
-	schema: z.object({
-		title: z.string(),
-		description: z.string(),
-		// Transform string to Date object
-		pubDate: z.coerce.date(),
-		updatedDate: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
-	}),
+const design = defineCollection({
+  type: 'content',
+  schema: z.object({}),
 });
 
-export const collections = { blog };
+const development = defineCollection({
+  type: 'content',
+  schema: z.object({}),
+});
+
+const game = defineCollection({
+  type: 'data',
+  schema: z.object({
+    title: z.string(),
+  }),
+});
+
+const gaming = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
+    game: reference('game'),
+  }),
+});
+
+const electronics = defineCollection({
+  type: 'content',
+  schema: z.object({}),
+});
+
+const making = defineCollection({
+  type: 'content',
+  schema: z.object({}),
+});
+
+export const collections = {
+  design,
+  development,
+  gaming,
+  game,
+  electronics,
+  making,
+};
