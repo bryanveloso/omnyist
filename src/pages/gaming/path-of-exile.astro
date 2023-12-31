@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+
+import BaseHead from '@/components/BaseHead.astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+import { Content as History } from '@/components/gaming/path-of-exile/history.md';
+
+const entries = (
+  await getCollection('gaming', ({ data }) => {
+    return data.game.id === 'path-of-exile';
+  })
+).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const title = 'Path of Exile';
+---
+
+<BaseLayout>
+  <BaseHead title={title} description={''} slot="head" />
+  <style slot="head">
+    body {
+      background-color: black;
+    }
+  </style>
+
+  <!-- Content -->
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <h1>Path of Exile</h1>
+
+    <div class="md:flex">
+      <div class="">
+        <h2>Notes</h2>
+        {
+          entries.map(async (entry) => {
+            const { Content } = await entry.render();
+            return (
+              <article class="prose">
+                <h2>{entry.data.title}</h2>
+                <Content />
+              </article>
+            );
+          })
+        }
+      </div>
+
+      <div class="">
+        <h2>History</h2>
+        <div class="prose"><History /></div>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
